@@ -8,7 +8,7 @@ A simple, modern, and type-safe library to watch for page script updates.
 
 - 🚀 Zero dependencies
 - 🛡️ Fully type-safe API
--  nowoczesny Modern `async/await` architecture
+- ✨ Modern `async/await` architecture
 - 📦 Lightweight and simple
 
 ## Installation
