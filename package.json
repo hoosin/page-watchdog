@@ -1,0 +1,44 @@
+{
+  "name": "page-watchdog",
+  "version": "1.0.0",
+  "description": "A simple, modern, and type-safe library to watch for page script updates and notify you of changes.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc",
+    "test": "jest",
+    "prepublishOnly": "npm test && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hoosin/page-watchdog.git"
+  },
+  "keywords": [
+    "page",
+    "watch",
+    "script",
+    "update",
+    "dom",
+    "polling",
+    "typescript",
+    "frontend",
+    "watchdog"
+  ],
+  "author": "hoosin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hoosin/page-watchdog/issues"
+  },
+  "homepage": "https://github.com/hoosin/page-watchdog#readme",
+  "devDependencies": {
+    "@types/jest": "^29.0.0",
+    "jest": "^29.0.0",
+    "jest-environment-jsdom": "^29.0.0",
+    "ts-jest": "^29.0.0",
+    "typescript": "^5.0.0"
+  }
+}

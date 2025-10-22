@@ -1,0 +1,26 @@
+# Dependencies
+/node_modules/
+
+# Build output
+/dist/
+
+# Test coverage
+/coverage/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDEs and editors
+.idea/
+.vscode/
+*.sublime-workspace
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
