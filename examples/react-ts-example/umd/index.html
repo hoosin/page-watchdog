@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page Watchdog Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/page-watchdog@1.2.3/dist/page-watchdog.umd.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        
+        .reload-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeIn 0.2s ease;
+        }
+        
+        .reload-modal {
+            background-color: #fff;
+            padding: 24px 28px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            width: 300px;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .reload-modal h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+        }
+        
+        .reload-modal p {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .reload-modal button {
+            padding: 8px 16px;
+            margin: 0 6px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        
+        .reload-confirm {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .reload-confirm:hover {
+            background-color: #0056b3;
+        }
+        
+        .reload-cancel {
+            background-color: #e0e0e0;
+        }
+        
+        .reload-cancel:hover {
+            background-color: #c7c7c7;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        // 创建自定义弹窗函数
+        function showReloadModal(message, onConfirm, onCancel) {
+            const overlay = document.createElement("div");
+            overlay.className = "reload-modal-overlay";
+
+            overlay.innerHTML = `
+        <div class="reload-modal">
+          <h3>页面检测到更新</h3>
+          <p>${message}</p>
+          <div>
+            <button class="reload-confirm">刷新</button>
+            <button class="reload-cancel">稍后</button>
+          </div>
+        </div>
+      `;
+
+            document.body.appendChild(overlay);
+
+            overlay.querySelector(".reload-confirm").addEventListener("click", () => {
+                document.body.removeChild(overlay);
+                if (onConfirm) onConfirm();
+            });
+
+            overlay.querySelector(".reload-cancel").addEventListener("click", () => {
+                document.body.removeChild(overlay);
+                if (onCancel) onCancel();
+            });
+        }
+
+        (async() => {
+            try {
+                const watcher = await PageWatcher.create({
+                    timer: 5000
+                });
+
+                watcher.on("changed", () => {
+                    console.log("Page has new scripts!");
+                    showReloadModal(
+                        "检测到页面资源更新，是否立即刷新？",
+                        () => {
+                            window.location.reload();
+                        },
+                        () => {
+                            console.log("用户选择稍后刷新。");
+                        }
+                    );
+                });
+
+                watcher.on("unchanged", () => {
+                    const time = new Date().toLocaleTimeString();
+                    console.log(`No updates found at ${time}.`);
+                });
+
+                console.log("Page Watchdog is now active.");
+            } catch (e) {
+                console.error("Failed to initialize Page Watchdog:", e);
+            }
+        })();
+    </script>
+</body>
+
+</html>
