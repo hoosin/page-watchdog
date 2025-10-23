@@ -6,12 +6,14 @@ A simple, modern, and type-safe library to watch for page script updates.
 
 ## Features
 
-- 🚀 Zero dependencies
-- 🛡️ Fully type-safe API
-- ✨ Modern `async/await` architecture
-- 📦 Lightweight and simple
+- 🚀 **Zero Dependencies**: Pure native implementation, no external libraries required.
+- 🛡️ **Fully Type-Safe**: Complete TypeScript support for a superior developer experience.
+- ✨ **Modern Architecture**: Built with `async/await` for clean, readable asynchronous code.
+- 📦 **Lightweight & Simple**: Minimal footprint with an intuitive, easy-to-use API.
 
 ## Installation
+
+Install the package from npm:
 
 ```bash
 npm install page-watchdog
@@ -19,7 +21,9 @@ npm install page-watchdog
 
 ## Usage
 
-The recommended way to use Page Watchdog is with a top-level `async` context.
+### With a Bundler (like Vite or Webpack)
+
+The recommended way to use Page Watchdog is by importing it into your project.
 
 ```typescript
 import { PageWatcher } from 'page-watchdog';
@@ -30,22 +34,10 @@ async function initializeWatcher() {
 
     watcher.on('update', () => {
       console.log('Page has new scripts! Reloading...');
-      // Example: Force a reload to get the new content
       window.location.reload();
     });
 
-    watcher.on('no-update', () => {
-      console.log('No updates found during this check.');
-    });
-
-    watcher.on('error', (err) => {
-      // The `err` parameter is automatically typed as `Error`
-      console.error('Watcher encountered an error:', err.message);
-      // You might want to stop the watcher if a persistent error occurs
-      watcher.stop();
-    });
-
-    console.log('Page Watchdog is now active.');
+    // ... other event listeners
 
   } catch (e) {
     console.error('Failed to initialize Page Watchdog:', e);
@@ -55,24 +47,50 @@ async function initializeWatcher() {
 initializeWatcher();
 ```
 
-## API
+### In the Browser (via CDN)
+
+You can also use Page Watchdog directly in the browser by including it from a CDN like jsDelivr.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/page-watchdog@latest/dist/page-watchdog.umd.min.js"></script>
+<script>
+  (async () => {
+    try {
+      // The watcher is available on the global window.PageWatcher object
+      const watcher = await window.PageWatcher.create({ timer: 5000 });
+
+      watcher.on('update', () => {
+        console.log('Page has new scripts! Reloading...');
+        window.location.reload();
+      });
+
+      console.log('Page Watchdog is now active.');
+
+    } catch (e) {
+      console.error('Failed to initialize Page Watchdog:', e);
+    }
+  })();
+</script>
+```
+
+## API Reference
 
 ### `PageWatcher.create(options?)`
 
-Creates and initializes a new `PageWatcher` instance. This is an `async` method and must be awaited.
+Asynchronously creates and initializes a new `PageWatcher` instance. This method returns a `Promise` that resolves with the watcher instance.
 
-- `options`: An optional configuration object.
-  - `timer` (number): The interval in milliseconds to check for updates. Defaults to `10000` (10 seconds).
+- `options` (optional): A configuration object.
+  - `timer` (number): The interval in milliseconds to check for updates. **Default**: `10000`.
 
 ### `watcher.on(event, listener)`
 
 Listens for events.
 
-- `event`: The event to listen for. Can be:
+- `event`: The event to listen for:
   - `'update'`: Fired when a change in script tags is detected.
-  - `'no-update'`: Fired when no changes are detected.
-  - `'error'`: Fired when an error occurs during initialization or polling. The listener receives an `Error` object.
+  - `'no-update'`: Fired when no changes are detected during a check.
+  - `'error'`: Fired when an error occurs. The listener receives an `Error` object.
 
 ### `watcher.stop()`
 
-Stops the watcher from polling for updates. Call this to clean up when the watcher is no longer needed.
+Stops the watcher from polling for updates. Call this to clean up resources when the watcher is no longer needed.

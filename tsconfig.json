@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
     "target": "es2020",
-    "module": "commonjs",
+    "module": "esnext",
     "declaration": true,
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
-    "lib": ["es2020", "dom"]
+    "lib": ["es2020", "dom"],
+    "moduleResolution": "node"
   },
   "include": [
     "src"

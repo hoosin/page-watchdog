@@ -1,8 +1,8 @@
 [English](./README.md) | [简体中文](./README.zh-CN.md)
 
-# Page Watchdog：页面脚本动态监控库
+# Page Watchdog：页面脚本动态监控引擎
 
-Page Watchdog 是一款专为现代 Web 应用设计的轻量级脚本监控库。它通过高效的轮询机制，实时感知页面脚本的动态变化，并以事件驱动的方式通知应用，从而实现诸如热重载、版本更新提示等高级功能。项目采用纯 TypeScript 构建，确保了卓越的类型安全与开发体验。
+Page Watchdog 是一款专为现代 Web 应用设计的轻量级脚本监控引擎。它通过高效的轮询机制，实时感知页面脚本的动态变化，并以事件驱动的方式通知应用，从而实现诸如热重载、版本更新提示等高级功能。项目采用纯 TypeScript 构建，确保了卓越的类型安全与开发体验。
 
 ## 核心优势
 
@@ -13,42 +13,60 @@ Page Watchdog 是一款专为现代 Web 应用设计的轻量级脚本监控库�
 
 ## 快速上手
 
-我们推荐在应用的顶层 `async` 上下文环境中集成 Page Watchdog。
+### 方式一：通过 npm 集成 (推荐)
+
+在采用 Vite、Webpack 等构建工具的项目中，你可以通过 npm 安装并导入本库。
+
+```bash
+npm install page-watchdog
+```
 
 ```typescript
 import { PageWatcher } from 'page-watchdog';
 
 async function bootstrapWatcher() {
   try {
-    // 异步创建并启动监视器实例，配置轮询周期为 5 秒
     const watcher = await PageWatcher.create({ timer: 5000 });
 
-    // 订阅 `update` 事件，在脚本变更时触发
     watcher.on('update', () => {
       console.log('检测到应用更新，正在执行刷新操作...');
       window.location.reload();
     });
 
-    // 订阅 `no-update` 事件，用于调试或遥测
-    watcher.on('no-update', () => {
-      console.log('轮询周期完成，未发现脚本变更。');
-    });
-
-    // 订阅 `error` 事件，捕获并处理运行时异常
-    watcher.on('error', (err) => {
-      console.error('Page Watchdog 监视器在运行时发生异常:', err.message);
-      // 出现严重或连续错误时，应考虑终止监视器
-      watcher.stop();
-    });
-
-    console.log('Page Watchdog 监控服务已成功启动。');
+    // ... 其他事件监听
 
   } catch (e) {
-    console.error('Page Watchdog 初始化失败，监控服务未启动:', e);
+    console.error('Page Watchdog 初始化失败:', e);
   }
 }
 
 bootstrapWatcher();
+```
+
+### 方式二：在浏览器中直接使用 (通过 CDN)
+
+你也可以通过 CDN 直接在 HTML 页面中引入并使用 Page Watchdog。
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/page-watchdog@latest/dist/page-watchdog.umd.min.js"></script>
+<script>
+  (async () => {
+    try {
+      // UMD 包会创建一个全局变量 window.PageWatcher
+      const watcher = await window.PageWatcher.create({ timer: 5000 });
+
+      watcher.on('update', () => {
+        console.log('检测到应用更新，正在执行刷新操作...');
+        window.location.reload();
+      });
+
+      console.log('Page Watchdog 监控服务已成功启动。');
+
+    } catch (e) {
+      console.error('Page Watchdog 初始化失败:', e);
+    }
+  })();
+</script>
 ```
 
 ## API 参考
