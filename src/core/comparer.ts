@@ -1,25 +1,27 @@
 /**
- * Compares two arrays of script tag strings to see if they have changed.
- * This is a simple but effective check for changes, additions, or removals.
+ * Compares two arrays of script tag strings to see if the set of unique scripts has changed.
+ * This function checks for additions, removals, or modifications of unique scripts, ignoring order and duplicates.
  * @param oldScripts The array of script tags from the previous check.
  * @param newScripts The array of script tags from the current check.
- * @returns `true` if the scripts have changed, `false` otherwise.
+ * @returns `true` if the set of unique scripts has changed, `false` otherwise.
  */
 export function haveScriptsChanged(oldScripts: string[], newScripts: string[]): boolean {
-  if (oldScripts.length !== newScripts.length) {
-    return true;
-  }
-
   const oldSet = new Set(oldScripts);
   const newSet = new Set(newScripts);
 
-  // Check if any script from the old set is missing in the new set.
-  // This covers removals and modifications (since a modified script is a new string).
+  // 1. If the number of unique scripts is different, the set has changed.
+  if (oldSet.size !== newSet.size) {
+    return true;
+  }
+
+  // 2. If the sizes are the same, check if every script in the old set exists in the new set.
+  //    Since the sizes are equal, this is sufficient to prove set equality.
   for (const script of oldSet) {
     if (!newSet.has(script)) {
       return true;
     }
   }
 
+  // If sizes are equal and all elements of oldSet are in newSet, the sets are identical.
   return false;
 }

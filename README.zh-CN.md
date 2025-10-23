@@ -22,7 +22,7 @@ npm install page-watchdog
 ```
 
 ```typescript
-import { PageWatcher } from 'page-watchdog';
+import PageWatcher from 'page-watchdog';
 
 async function bootstrapWatcher() {
   try {
@@ -75,8 +75,9 @@ bootstrapWatcher();
 
 静态工厂方法，用于异步创建并初始化 `PageWatcher` 实例。此方法返回一个 `Promise`，其解析值为一个可用的 `watcher` 对象。
 
-- `options` (可选): `WatcherOptions` 配置对象。
+- `options` (可选): 配置对象。
   - `timer` (number): 轮询控制器检查更新的周期（单位：毫秒）。**默认值**: `10000`。
+  - `disableCache` (boolean): 决定是否禁用浏览器对页面抓取的缓存。默认情况下，每次抓取请求都会附加一个时间戳以防止缓存。如果需要允许浏览器缓存响应，请将此项设置为 `false`。**默认值**: `true`。
 
 ### `watcher.on(event, listener)`
 

@@ -17,7 +17,7 @@ export default {
       file: pkg.main,
       format: 'cjs',
       sourcemap: true,
-      exports: 'auto', // Since we now have a default export
+      exports: 'auto',
     },
     // ES Module (for modern bundlers)
     {
@@ -29,9 +29,9 @@ export default {
     {
       file: pkg.browser,
       format: 'umd',
-      name, // The global variable name
+      name,
       sourcemap: true,
-      exports: 'auto', // Use the default export as the global
+      exports: 'auto',
     },
     // UMD Minified
     {
@@ -39,12 +39,12 @@ export default {
       format: 'umd',
       name,
       sourcemap: true,
-      plugins: [terser({ keep_classnames: true })], // Minify the output, but preserve class names
-      exports: 'auto', // Use the default export as the global
+      plugins: [terser({ keep_classnames: true })],
+      exports: 'auto',
     },
   ],
   plugins: [
-    typescript({ tsconfig: './tsconfig.json' }),
-    nodeResolve(),
+    typescript({ tsconfig: './tsconfig.json', declarationDir: './dist/types' }),
+    nodeResolve({ browser: true }),
   ],
 };

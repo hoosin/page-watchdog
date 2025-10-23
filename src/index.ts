@@ -72,7 +72,7 @@ class PageWatcher extends Emitter<PageWatcherEvents> {
    */
   private async init(): Promise<void> {
     try {
-      const html = await getHtml();
+      const html = await getHtml(this.options.disableCache);
       this.oldScripts = parseScripts(html);
       this.startPolling();
     } catch (error) {
@@ -108,7 +108,7 @@ class PageWatcher extends Emitter<PageWatcherEvents> {
    */
   private async checkForUpdates(): Promise<void> {
     try {
-      const html = await getHtml();
+      const html = await getHtml(this.options.disableCache);
       const newScripts = parseScripts(html);
 
       if (haveScriptsChanged(this.oldScripts, newScripts)) {

@@ -26,7 +26,7 @@ npm install page-watchdog
 The recommended way to use Page Watchdog is by importing it into your project.
 
 ```typescript
-import { PageWatcher } from 'page-watchdog';
+import PageWatcher from 'page-watchdog';
 
 async function initializeWatcher() {
   try {
@@ -81,6 +81,7 @@ Asynchronously creates and initializes a new `PageWatcher` instance. This method
 
 - `options` (optional): A configuration object.
   - `timer` (number): The interval in milliseconds to check for updates. **Default**: `10000`.
+  - `disableCache` (boolean): Determines whether to disable browser caching for page fetches. By default, a timestamp is added to each fetch request to prevent caching. Set this to `false` to allow the browser to cache responses. **Default**: `true`.
 
 ### `watcher.on(event, listener)`
 

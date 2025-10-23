@@ -7,6 +7,15 @@
   "module": "dist/page-watchdog.esm.js",
   "browser": "dist/page-watchdog.umd.js",
   "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/page-watchdog.esm.js",
+      "require": "./dist/page-watchdog.cjs.js",
+      "browser": "./dist/page-watchdog.umd.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
+  "sideEffects": false,
   "files": [
     "dist"
   ],

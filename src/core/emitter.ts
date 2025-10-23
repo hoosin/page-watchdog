@@ -27,7 +27,7 @@ export class Emitter<T extends Record<string, any>> {
    */
   on<K extends keyof T>(key: K, fn: Listener<T[K]>): this {
     const listeners = this.dispatch[key] || [];
-    listeners.push(fn as Listener<any>);
+    listeners.push(fn);
     this.dispatch[key] = listeners;
     return this;
   }
@@ -41,7 +41,7 @@ export class Emitter<T extends Record<string, any>> {
   emit<K extends keyof T>(key: K, payload: T[K]): void {
     const listeners = this.dispatch[key];
     if (listeners && listeners.length > 0) {
-      listeners.forEach(fn => fn(payload));
+      listeners.forEach(listener => listener(payload));
     }
   }
 }
