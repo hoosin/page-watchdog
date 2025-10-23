@@ -17,7 +17,7 @@ export default {
       file: pkg.main,
       format: 'cjs',
       sourcemap: true,
-      exports: 'default', // Since we now have a default export
+      exports: 'auto', // Since we now have a default export
     },
     // ES Module (for modern bundlers)
     {
@@ -31,7 +31,7 @@ export default {
       format: 'umd',
       name, // The global variable name
       sourcemap: true,
-      exports: 'default', // Use the default export as the global
+      exports: 'auto', // Use the default export as the global
     },
     // UMD Minified
     {
@@ -40,7 +40,7 @@ export default {
       name,
       sourcemap: true,
       plugins: [terser()], // Minify the output
-      exports: 'default', // Use the default export as the global
+      exports: 'auto', // Use the default export as the global
     },
   ],
   plugins: [

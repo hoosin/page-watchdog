@@ -33,7 +33,7 @@ function ensureError(value: unknown): Error {
  *
  * @example
  * ```typescript
- * import { PageWatcher } from 'page-watchdog';
+ * import PageWatcher from 'page-watchdog'; // Note: default import now
  *
  * try {
  *   const watcher = await PageWatcher.create({ timer: 5000 });
@@ -53,7 +53,7 @@ function ensureError(value: unknown): Error {
  * }
  * ```
  */
-export class PageWatcher extends Emitter<PageWatcherEvents> {
+class PageWatcher extends Emitter<PageWatcherEvents> {
   private oldScripts: string[] = [];
   private poller: Poller;
 
