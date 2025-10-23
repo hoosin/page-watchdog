@@ -135,3 +135,6 @@ export class PageWatcher extends Emitter<PageWatcherEvents> {
 
 // Export the main class and types for library users
 export type { Options };
+
+// Add a default export for UMD and direct script usage
+export default PageWatcher;

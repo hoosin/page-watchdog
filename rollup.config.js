@@ -7,11 +7,7 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 
-// Convert package name (kebab-case) to PascalCase for the UMD global variable
-const name = pkg.name
-  .split('-')
-  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-  .join('');
+const name = 'PageWatcher';
 
 export default {
   input: 'src/index.ts',
@@ -21,6 +17,7 @@ export default {
       file: pkg.main,
       format: 'cjs',
       sourcemap: true,
+      exports: 'default', // Since we now have a default export
     },
     // ES Module (for modern bundlers)
     {
@@ -32,8 +29,9 @@ export default {
     {
       file: pkg.browser,
       format: 'umd',
-      name, // The global variable name, e.g., PageWatcher
+      name, // The global variable name
       sourcemap: true,
+      exports: 'default', // Use the default export as the global
     },
     // UMD Minified
     {
@@ -42,6 +40,7 @@ export default {
       name,
       sourcemap: true,
       plugins: [terser()], // Minify the output
+      exports: 'default', // Use the default export as the global
     },
   ],
   plugins: [
