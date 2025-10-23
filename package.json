@@ -9,10 +9,10 @@
   "types": "dist/types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/page-watchdog.esm.js",
-      "require": "./dist/page-watchdog.cjs.js",
+      "types": "./dist/types/index.d.ts",
       "browser": "./dist/page-watchdog.umd.js",
-      "types": "./dist/types/index.d.ts"
+      "import": "./dist/page-watchdog.esm.js",
+      "require": "./dist/page-watchdog.cjs.js"
     }
   },
   "sideEffects": false,
