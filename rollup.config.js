@@ -39,7 +39,7 @@ export default {
       format: 'umd',
       name,
       sourcemap: true,
-      plugins: [terser()], // Minify the output
+      plugins: [terser({ keep_classnames: true })], // Minify the output, but preserve class names
       exports: 'auto', // Use the default export as the global
     },
   ],
