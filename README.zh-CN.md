@@ -28,7 +28,7 @@ async function bootstrapWatcher() {
   try {
     const watcher = await PageWatcher.create({ timer: 5000 });
 
-    watcher.on('update', () => {
+    watcher.on('changed', () => {
       console.log('检测到应用更新，正在执行刷新操作...');
       window.location.reload();
     });
@@ -55,7 +55,7 @@ bootstrapWatcher();
       // UMD 包会创建一个全局变量 window.PageWatcher
       const watcher = await window.PageWatcher.create({ timer: 5000 });
 
-      watcher.on('update', () => {
+      watcher.on('changed', () => {
         console.log('检测到应用更新，正在执行刷新操作...');
         window.location.reload();
       });
@@ -84,8 +84,8 @@ bootstrapWatcher();
 注册事件监听器，以响应监视器的生命周期事件。
 
 - `event`: 事件名称，可选项如下：
-  - `'update'`: 当检测到页面脚本集合发生变更时触发。
-  - `'no-update'`: 在一个轮询周期内未检测到任何变更时触发。
+  - `'changed'`: 当检测到页面脚本集合发生变更时触发。
+  - `'unchanged'`: 在一个轮询周期内未检测到任何变更时触发。
   - `'error'`: 在初始化或轮询过程中发生错误时触发。监听器回调将接收一个 `Error` 对象。
 
 ### `watcher.stop()`

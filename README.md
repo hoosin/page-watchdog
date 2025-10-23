@@ -32,7 +32,7 @@ async function initializeWatcher() {
   try {
     const watcher = await PageWatcher.create({ timer: 5000 });
 
-    watcher.on('update', () => {
+    watcher.on('changed', () => {
       console.log('Page has new scripts! Reloading...');
       window.location.reload();
     });
@@ -59,7 +59,7 @@ You can also use Page Watchdog directly in the browser by including it from a CD
       // The watcher is available on the global window.PageWatcher object
       const watcher = await window.PageWatcher.create({ timer: 5000 });
 
-      watcher.on('update', () => {
+      watcher.on('changed', () => {
         console.log('Page has new scripts! Reloading...');
         window.location.reload();
       });
@@ -88,8 +88,8 @@ Asynchronously creates and initializes a new `PageWatcher` instance. This method
 Listens for events.
 
 - `event`: The event to listen for:
-  - `'update'`: Fired when a change in script tags is detected.
-  - `'no-update'`: Fired when no changes are detected during a check.
+  - `'changed'`: Fired when a change in script tags is detected.
+  - `'unchanged'`: Fired when no changes are detected during a check.
   - `'error'`: Fired when an error occurs. The listener receives an `Error` object.
 
 ### `watcher.stop()`

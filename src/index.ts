@@ -1,6 +1,6 @@
-import { haveScriptsChanged } from './core/comparer';
+import { areScriptsChanged } from './core/comparer';
 import { Emitter } from './core/emitter';
-import { getHtml } from './core/fetcher';
+import { fetchEndpoint } from './core/fetcher'; // Renamed import
 import { parseScripts } from './core/parser';
 import { Poller } from './core/poller';
 import type { Options } from './types';
@@ -9,8 +9,8 @@ import type { Options } from './types';
  * Defines the events and their corresponding payload types for the PageWatcher.
  */
 type PageWatcherEvents = {
-  update: void; // Emitted when a script change is detected.
-  'no-update': void; // Emitted when no change is detected.
+  changed: void; // Emitted when a script change is detected.
+  unchanged: void; // Emitted when no change is detected.
   error: Error; // Emitted when an error occurs during fetching or initialization.
 };
 
@@ -38,9 +38,13 @@ function ensureError(value: unknown): Error {
  * try {
  *   const watcher = await PageWatcher.create({ timer: 5000 });
  *
- *   watcher.on('update', () => {
+ *   watcher.on('changed', () => {
  *     console.log('Page has new scripts! Reloading...');
  *     window.location.reload();
+ *   });
+ *
+ *   watcher.on('unchanged', () => {
+ *     console.log('Page scripts are unchanged.');
  *   });
  *
  *   watcher.on('error', (err) => {
@@ -72,7 +76,7 @@ class PageWatcher extends Emitter<PageWatcherEvents> {
    */
   private async init(): Promise<void> {
     try {
-      const html = await getHtml(this.options.disableCache);
+      const html = await fetchEndpoint(this.options.disableCache); // Renamed call
       this.oldScripts = parseScripts(html);
       this.startPolling();
     } catch (error) {
@@ -108,14 +112,14 @@ class PageWatcher extends Emitter<PageWatcherEvents> {
    */
   private async checkForUpdates(): Promise<void> {
     try {
-      const html = await getHtml(this.options.disableCache);
+      const html = await fetchEndpoint(this.options.disableCache); // Renamed call
       const newScripts = parseScripts(html);
 
-      if (haveScriptsChanged(this.oldScripts, newScripts)) {
+      if (areScriptsChanged(this.oldScripts, newScripts)) {
         this.oldScripts = newScripts;
-        this.emit('update', undefined);
+        this.emit('changed', undefined);
       } else {
-        this.emit('no-update', undefined);
+        this.emit('unchanged', undefined);
       }
     } catch (error) {
       const safeError = ensureError(error);

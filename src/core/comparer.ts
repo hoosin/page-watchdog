@@ -5,7 +5,7 @@
  * @param newScripts The array of script tags from the current check.
  * @returns `true` if the set of unique scripts has changed, `false` otherwise.
  */
-export function haveScriptsChanged(oldScripts: string[], newScripts: string[]): boolean {
+export function areScriptsChanged(oldScripts: string[], newScripts: string[]): boolean {
   const oldSet = new Set(oldScripts);
   const newSet = new Set(newScripts);
 

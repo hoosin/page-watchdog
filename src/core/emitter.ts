@@ -7,7 +7,7 @@ export type Listener<P = void> = (payload: P) => void;
 /**
  * A map of event keys to their listener functions.
  */
-type ListenerMap<T extends Record<string, any>> = {
+type ListenerMap<T extends Record<string, unknown>> = {
   [K in keyof T]: Listener<T[K]>[];
 };
 
@@ -15,7 +15,7 @@ type ListenerMap<T extends Record<string, any>> = {
  * A simple, generic, and type-safe event emitter class.
  * @template T A map of event names to their payload types.
  */
-export class Emitter<T extends Record<string, any>> {
+export class Emitter<T extends Record<string, unknown>> {
   private dispatch: Partial<ListenerMap<T>> = {};
 
   /**
