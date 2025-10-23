@@ -1,4 +1,4 @@
-import { PageWatcher } from './index';
+import PageWatcher from './index';
 import { getHtml } from './core/fetcher';
 
 // Mock the fetcher module
