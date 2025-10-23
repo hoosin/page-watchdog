@@ -1,6 +1,6 @@
 import { areScriptsChanged } from './core/comparer';
 import { Emitter } from './core/emitter';
-import { fetchEndpoint } from './core/fetcher'; // Renamed import
+import { fetchEndpoint } from './core/fetcher';
 import { parseScripts } from './core/parser';
 import { Poller } from './core/poller';
 import type { Options } from './types';
@@ -76,7 +76,7 @@ class PageWatcher extends Emitter<PageWatcherEvents> {
    */
   private async init(): Promise<void> {
     try {
-      const html = await fetchEndpoint(this.options.disableCache); // Renamed call
+      const html = await fetchEndpoint(this.options.disableCache);
       this.oldScripts = parseScripts(html);
       this.startPolling();
     } catch (error) {
@@ -112,7 +112,7 @@ class PageWatcher extends Emitter<PageWatcherEvents> {
    */
   private async checkForUpdates(): Promise<void> {
     try {
-      const html = await fetchEndpoint(this.options.disableCache); // Renamed call
+      const html = await fetchEndpoint(this.options.disableCache);
       const newScripts = parseScripts(html);
 
       if (areScriptsChanged(this.oldScripts, newScripts)) {

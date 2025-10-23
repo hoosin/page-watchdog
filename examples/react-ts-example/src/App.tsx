@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { PageWatcher } from 'page-watchdog'
+import PageWatcher from 'page-watchdog'
 import './App.css'
 
 function App() {
@@ -11,17 +11,17 @@ function App() {
 
         const initializeWatcher = async () => {
             try {
-                // 初始化 PageWatcher，每 5 秒检查一次
+                // Initialize PageWatcher, checking every 5 seconds
                 watcher = await PageWatcher.create({ timer: 5000 })
                 setStatus('Page Watchdog is active. Checking for updates every 5 seconds.')
 
-                watcher.on('update', () => {
+                watcher.on('changed', () => {
                     setStatus('Page scripts updated! Reloading page in 3 seconds...')
                     console.log('Page scripts updated! Reloading...')
                     setTimeout(() => window.location.reload(), 3000)
                 })
 
-                watcher.on('no-update', () => {
+                watcher.on('unchanged', () => {
                     const currentTime = new Date().toLocaleTimeString()
                     setStatus(`No updates found at ${currentTime}. Still active.`)
                     console.log(`No updates found at ${currentTime}.`)
