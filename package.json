@@ -1,6 +1,6 @@
 {
   "name": "page-watchdog",
-  "version": "1.2.0",
+  "version": "1.0.0",
   "type": "module",
   "description": "A simple, modern, and type-safe library to watch for page script updates and notify you of changes.",
   "main": "dist/page-watchdog.cjs.js",
