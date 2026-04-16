@@ -33,6 +33,20 @@ export class Emitter<T extends Record<string, unknown>> {
   }
 
   /**
+   * Removes a listener for a given event key.
+   * @param key The event key to stop listening for.
+   * @param fn The listener function to remove.
+   * @returns The Emitter instance for chaining.
+   */
+  off<K extends keyof T>(key: K, fn: Listener<T[K]>): this {
+    const listeners = this.dispatch[key];
+    if (listeners) {
+      this.dispatch[key] = listeners.filter(l => l !== fn) as ListenerMap<T>[K];
+    }
+    return this;
+  }
+
+  /**
    * Emits an event to all registered listeners for a given key.
    * Ensures the payload matches the type defined for the event key.
    * @param key The event key to emit.

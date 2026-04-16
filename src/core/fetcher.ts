@@ -1,6 +1,5 @@
 /**
- * Fetches the content from a given endpoint.
- * Assumes the base URL is the current origin.
+ * Fetches the content from the current page.
  * @param disableCache Determines whether to disable browser caching. If not `false`, a timestamp is added to the URL.
  * @returns A promise that resolves with the content as a string.
  * @throws An error if the fetch operation fails.
@@ -10,7 +9,7 @@ export async function fetchEndpoint(disableCache?: boolean): Promise<string> {
 
   // Caching is only allowed when `disableCache` is explicitly set to `false`.
   if (disableCache !== false) {
-    url += `?_=${new Date().getTime()}`;
+    url += `?_=${Date.now()}`;
   }
 
   const response = await fetch(url);

@@ -1,4 +1,4 @@
-import { Emitter, Listener } from './emitter';
+import { Emitter } from './emitter';
 
 describe('Emitter', () => {
   // Define a type for our test events
@@ -73,5 +73,24 @@ describe('Emitter', () => {
 
   it('should handle emitting an event with no registered listeners gracefully', () => {
     expect(() => emitter.emit('eventA', 'no-listeners')).not.toThrow();
+  });
+
+  it('should remove a specific listener with off()', () => {
+    const listener1 = jest.fn();
+    const listener2 = jest.fn();
+    emitter.on('eventA', listener1);
+    emitter.on('eventA', listener2);
+
+    emitter.off('eventA', listener1);
+    emitter.emit('eventA', 'after-off');
+
+    expect(listener1).not.toHaveBeenCalled();
+    expect(listener2).toHaveBeenCalledTimes(1);
+    expect(listener2).toHaveBeenCalledWith('after-off');
+  });
+
+  it('should handle off() for a listener that was never registered', () => {
+    const listener = jest.fn();
+    expect(() => emitter.off('eventA', listener)).not.toThrow();
   });
 });

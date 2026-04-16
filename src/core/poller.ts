@@ -1,5 +1,6 @@
 /**
- * A class that handles repeated execution of a callback at a set interval.
+ * A class that handles repeated execution of an async callback at a set interval.
+ * Uses recursive setTimeout to ensure the previous callback completes before scheduling the next.
  */
 export class Poller {
   private timerId: number | null = null;
@@ -7,15 +8,25 @@ export class Poller {
   /**
    * Starts the polling process.
    * If polling is already active, it will be stopped and restarted.
-   * @param callback The function to execute at each interval.
+   * @param callback The function to execute at each interval. Can be async.
    * @param interval The interval in milliseconds.
    */
-  start(callback: () => void, interval: number): void {
+  start(callback: () => void | Promise<void>, interval: number): void {
     if (this.timerId) {
       this.stop();
     }
-    // Using window.setInterval for browser compatibility.
-    this.timerId = window.setInterval(callback, interval);
+
+    const tick = () => {
+      this.timerId = window.setTimeout(async () => {
+        await callback();
+        // Only schedule the next tick if polling hasn't been stopped during the callback.
+        if (this.timerId !== null) {
+          tick();
+        }
+      }, interval);
+    };
+
+    tick();
   }
 
   /**
@@ -23,7 +34,7 @@ export class Poller {
    */
   stop(): void {
     if (this.timerId) {
-      window.clearInterval(this.timerId);
+      window.clearTimeout(this.timerId);
       this.timerId = null;
     }
   }

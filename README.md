@@ -2,7 +2,7 @@
 
 # Page Watchdog
 
-A simple, modern, and type-safe library to watch for page script updates.
+A simple, modern, and type-safe library to detect page resource changes (scripts and stylesheets).
 
 ## Features
 
@@ -77,20 +77,28 @@ You can also use Page Watchdog directly in the browser by including it from a CD
 
 ### `PageWatcher.create(options?)`
 
-Asynchronously creates and initializes a new `PageWatcher` instance. This method returns a `Promise` that resolves with the watcher instance.
+Asynchronously creates and initializes a new `PageWatcher` instance. Returns a `Promise` that resolves with the watcher instance.
 
 - `options` (optional): A configuration object.
   - `timer` (number): The interval in milliseconds to check for updates. **Default**: `10000`.
-  - `disableCache` (boolean): Determines whether to disable browser caching for page fetches. By default, a timestamp is added to each fetch request to prevent caching. Set this to `false` to allow the browser to cache responses. **Default**: `true`.
+  - `disableCache` (boolean): Whether to disable browser caching for page fetches. A timestamp is appended to each request by default. Set to `false` to allow caching. **Default**: `true`.
 
 ### `watcher.on(event, listener)`
 
-Listens for events.
+Registers an event listener. Returns the watcher instance for chaining.
 
-- `event`: The event to listen for:
-  - `'changed'`: Fired when a change in script tags is detected.
+- `event`: The event name.
+  - `'changed'`: Fired when a change in script or stylesheet tags is detected.
   - `'unchanged'`: Fired when no changes are detected during a check.
   - `'error'`: Fired when an error occurs. The listener receives an `Error` object.
+- `listener`: The callback function.
+
+### `watcher.off(event, listener)`
+
+Removes a previously registered event listener. Returns the watcher instance for chaining.
+
+- `event`: The event name.
+- `listener`: The callback function to remove (must be the same reference passed to `on()`).
 
 ### `watcher.stop()`
 

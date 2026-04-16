@@ -1,7 +1,7 @@
 import { areScriptsChanged } from './core/comparer';
 import { Emitter } from './core/emitter';
 import { fetchEndpoint } from './core/fetcher';
-import { parseScripts } from './core/parser';
+import { parseResources } from './core/parser';
 import { Poller } from './core/poller';
 import type { Options } from './types';
 
@@ -9,7 +9,7 @@ import type { Options } from './types';
  * Defines the events and their corresponding payload types for the PageWatcher.
  */
 type PageWatcherEvents = {
-  changed: void; // Emitted when a script change is detected.
+  changed: void; // Emitted when a resource (script or stylesheet) change is detected.
   unchanged: void; // Emitted when no change is detected.
   error: Error; // Emitted when an error occurs during fetching or initialization.
 };
@@ -27,8 +27,8 @@ function ensureError(value: unknown): Error {
 }
 
 /**
- * The main class for watching page script changes.
- * It periodically fetches the page, compares the script tags,
+ * The main class for watching page resource changes.
+ * It periodically fetches the page, compares the script and stylesheet tags,
  * and emits events based on whether changes are detected.
  *
  * @example
@@ -77,7 +77,7 @@ class PageWatcher extends Emitter<PageWatcherEvents> {
   private async init(): Promise<void> {
     try {
       const html = await fetchEndpoint(this.options.disableCache);
-      this.oldScripts = parseScripts(html);
+      this.oldScripts = parseResources(html);
       this.startPolling();
     } catch (error) {
       const safeError = ensureError(error);
@@ -104,16 +104,16 @@ class PageWatcher extends Emitter<PageWatcherEvents> {
    * Starts the polling mechanism.
    */
   private startPolling(): void {
-    this.poller.start(() => this.checkForUpdates(), this.options.timer || 10000);
+    this.poller.start(() => this.checkForUpdates(), this.options.timer ?? 10000);
   }
 
   /**
-   * Fetches the latest page content, compares scripts, and emits events.
+   * Fetches the latest page content, compares resources, and emits events.
    */
   private async checkForUpdates(): Promise<void> {
     try {
       const html = await fetchEndpoint(this.options.disableCache);
-      const newScripts = parseScripts(html);
+      const newScripts = parseResources(html);
 
       if (areScriptsChanged(this.oldScripts, newScripts)) {
         this.oldScripts = newScripts;

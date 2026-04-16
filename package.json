@@ -2,7 +2,7 @@
   "name": "page-watchdog",
   "version": "1.2.3",
   "type": "module",
-  "description": "A simple, modern, and type-safe library to watch for page script updates and notify you of changes.",
+  "description": "A simple, modern, and type-safe library to detect page resource changes (scripts and stylesheets).",
   "main": "dist/page-watchdog.cjs.js",
   "module": "dist/page-watchdog.esm.js",
   "browser": "dist/page-watchdog.umd.js",

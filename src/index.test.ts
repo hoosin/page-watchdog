@@ -81,10 +81,7 @@ describe('PageWatcher', () => {
       watcher.on('unchanged', unchangedListener);
 
       // Advance time to trigger the first poll
-      jest.advanceTimersByTime(5000);
-
-      // The promise from checkForUpdates needs to resolve
-      await Promise.resolve();
+      await jest.advanceTimersByTimeAsync(5000);
 
       expect(mockedFetchEndpoint).toHaveBeenCalledTimes(2); // 1 for init, 1 for poll
       expect(mockedAreScriptsChanged).toHaveBeenCalledTimes(1); // Only called once during poll
@@ -105,8 +102,7 @@ describe('PageWatcher', () => {
       mockedFetchEndpoint.mockResolvedValueOnce(updatedHtml);
       mockedAreScriptsChanged.mockReturnValueOnce(true); // For poll
 
-      jest.advanceTimersByTime(5000);
-      await Promise.resolve(); // Wait for async operations in checkForUpdates
+      await jest.advanceTimersByTimeAsync(5000);
 
       expect(mockedFetchEndpoint).toHaveBeenCalledTimes(2);
       expect(mockedAreScriptsChanged).toHaveBeenCalledTimes(1); // Only called once during poll
@@ -124,8 +120,7 @@ describe('PageWatcher', () => {
       const errorListener = jest.fn();
       watcher.on('error', errorListener);
 
-      jest.advanceTimersByTime(5000);
-      await Promise.resolve();
+      await jest.advanceTimersByTimeAsync(5000);
 
       expect(mockedFetchEndpoint).toHaveBeenCalledTimes(2);
       expect(mockedAreScriptsChanged).toHaveBeenCalledTimes(0); // Correct: Not called if fetch fails before it
@@ -147,7 +142,7 @@ describe('PageWatcher', () => {
       watcher.stop();
 
       // Advance time well beyond the interval
-      jest.advanceTimersByTime(10000);
+      await jest.advanceTimersByTimeAsync(10000);
 
       // The listener should not have been called because polling was stopped
       expect(unchangedListener).not.toHaveBeenCalled();
